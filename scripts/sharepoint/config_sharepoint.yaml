@@ -1,0 +1,37 @@
+source_name: sharepoint
+source_type: excel
+
+list_method:
+  - personne:
+    - DIM_BDESE.xlsx
+  - esms:
+    - DIM_BDESE.xlsx
+  - contrat:
+    - DIM_BDESE.xlsx
+  - brut_cot:
+    - BDESE_2019_2020_2021.xlsx
+    - BDESE_2022_2023.xlsx
+    - BDESE1_2024_2025.xlsx
+  - etp:
+    - BDESE_2019_2020_2021.xlsx
+    - BDESE_2022_2023.xlsx
+    - BDESE1_2024_2025.xlsx
+  - absence:
+    - BDESE_2019_2020_2021.xlsx
+    - BDESE_2022_2023.xlsx
+    - BDESE2_2024_2025.xlsx
+  - accident_travail:
+    - BDESE_2019_2020_2021.xlsx
+    - BDESE2_2024_2025.xlsx
+  - prime:
+    - BDESE_2019_2020_2021.xlsx
+    - BDESE_2022_2023.xlsx
+    - BDESE2_2024_2025.xlsx
+  - document:
+    - BDES_Doc_OVE.xlsx
+  - departement:
+    - DEPARTEMENTS.xlsx
+  - plage_compte:
+    - INDICATEURS_FINANCE.xlsx
+  - indicateur_fin_bdese:
+    - INDICATEURS_FINANCE.xlsx

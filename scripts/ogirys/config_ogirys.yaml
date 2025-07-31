@@ -1,0 +1,206 @@
+source_name: ogirys
+type_source: api
+url: https://hdsecure.ogirys.com/eu/ove/api.php/
+
+authorization:
+  name: access_token
+  type: parameter
+
+variable_globale:
+  var_date_debut_mois: -30
+  var_date_fin_mois: -30
+
+list_method:
+  - modalite:
+    module: Usg/UsgBenefModalite
+    method: get
+    loop_url: oui
+    parameters:
+      - conditions: (@stay.structure.code_dossier,'=',__var_structure__)
+      - fields: id,name,begin,end,main,modalite.id,modalite.name,stay.id
+  - structure:
+    module: Org/OrgStructure
+    method: get
+    loop_url: non
+    parameters:
+      - fields: id,name,code_dossier
+  - sejour:
+    module: Usg/UsgSejour
+    method: get
+    loop_url: oui
+    parameters:
+      - conditions: (@structure.code_dossier,'=',__var_structure__)
+      - fields: id,statut,date_entree,date_sortie,date_fin_suivi,benef.id,benef.nom,benef.prenom,structure.id
+  - presence:
+    module: Presence/Presence
+    method: get
+    loop_url: oui
+    loop_method: 
+      type_boucle: quotidien
+      nom_variable_debut: __var_debut_presence__
+      nom_variable_fin: __var_fin_presence__
+      date_debut_requete: __var_date_debut_mois__
+      date_fin_requete: __var_date_fin_mois__
+      interval: 3
+    parameters:
+      - conditions: (@structure.code_dossier,'=',__var_structure__)%26(@date,'>=',__var_debut_presence__)%26(@date,'<=',__var_fin_presence__)
+      - fields: id,date,state,structure.id,benef.id,modalite.id,period.id
+  - periode:
+    module: Presence/PresencePeriod
+    method: get
+    loop_url: oui
+    parameters:
+      - conditions: (@structure.code_dossier, '=',__var_structure__)
+      - fields: id,name,begin,end,begin_hour,end_hour,repas
+  - action_usager:
+    module: Project/ProjectAction
+    method: get
+    loop_url: oui
+    parameters:
+      - conditions: (@structure.code_dossier,'=',__var_structure__)%26(@date,'>=', __var_date_debut_mois__)%26(@date,'<=',__var_date_fin_mois__)
+      - fields: id,name,debut,fin,state,structure.id, usgbenef_participation.usgbenef.nom, usgbenef_participation.usgbenef.prenom
+  # - action_de_groupe:
+  #   module: Project/ProjectActionGroup
+  #   method: get
+  #   parameters:
+  #     - conditions: (@structure.code_dossier,'=',__var_structure__)%26(@date,'>=', __var_date_debut_mois__)%26(@date,'<=',__var_date_fin_mois__)
+  #     - fields: id,name,debut,fin,statut,structure.id
+  # - acte_participation:
+  #   module: Project/ProjectActionUsgPart
+  #   method: get
+  #   parameters:
+  #     - conditions: (@projectaction.structure.code_dossier,'=',__var_structure__)%26(@projectaction.date,'>=',__var_date_debut_mois__)%26(@projectaction.date,'<=',__var_date_fin_mois__)
+  #     - fields: id,projectaction.id,usgbenef.id,state,raison,modalite.id
+  # - rdv_admission:
+  #   module: Usg/UsgRDV
+  #   method: get
+  #   parameters:
+  #     - conditions: (@usgbenef.structure.code_dossier,'=',__var_structure__)%26(@debut,'>=',__var_date_debut_mois__)%26(@debut,'<=',__var_date_fin_mois__)
+  #     - fields: id,name,debut,fin,statut,usgbenef.structure.id, usgbenef.id
+  # - dossier_medical:
+  #   module: Medical/Medical
+  #   method: get
+  #   parameters: 
+  #     - conditions: (@usager.structure.code_dossier,'=',__var_structure__)
+  #     - fields: id,usager.id,usager.nom,usager.prenom
+  # - consultation_generaliste:
+  #   module: Medical/Medical
+  #   method: get
+  #   parameters:
+  #     - conditions: (@consultations.structure.code_dossier,'=',__var_structure__)%26(@consultations.date,'>=',__var_date_debut_mois__)%26(@consultations.date,'<=',__var_date_fin_mois__)
+  #     - fields: id,consultations.id,consultations.name,consultations.debut,consultations.fin,consultations.structure.id,consultations.structure.code_dossier,consultations.structure.type.name,consultations.statut,consultations.motif_absence
+  # - consultation_specialiste:
+  #   module: Medical/Medical
+  #   method: get
+  #   parameters:
+  #     - conditions: (@specialites.structure.code_dossier,'=',__var_structure__)%26(@specialites.date,'>=',__var_date_debut_mois__)%26(@specialites.date,'<=',__var_date_fin_mois__)
+  #     - fields: id,specialites.id,specialites.name,specialites.debut,specialites.fin,specialites.statut,specialites.structure.id,specialites.structure.type.name,specialites.structure.code_dossier,specialites.motif_absence
+  # - action_infirmier:
+  #   module: Medical/Medical
+  #   method: get
+  #   parameters:
+  #     - conditions: (@consultations_ide.structure.code_dossier,'=',__var_structure__)%26(@consultations_ide.date,'>=',__var_date_debut_mois__)%26(@consultations_ide.date,'<=',__var_date_fin_mois__)
+  #     - fields: id,usgbenef,consultations_ide.id,consultations_ide.name,consultations_ide.debut,consultations_ide.fin
+  # - consultation_psychologue:
+  #   module: Soin/SoinConsultation
+  #   method: get
+  #   parameters:
+  #     - conditions: (@structure.code_dossier,'=',__var_structure__)%26(@date,'>=',__var_date_debut_mois__)%26(@date,'<=',__var_date_fin_mois__)
+  #     - fields: id,name,statut,debut,fin,structure.id,usgbenef.id,usgbenef.nom,usgbenef.prenom,type,motif_absence
+  # - consultation_participation:
+  #   module: Soin/SoinConsultationParticipation
+  #   method: get
+  #   parameters:
+  #     - conditions: (@consultation.structure.code_dossier,'=',__var_structure__)%26(@consultation.date,'>=',__var_date_debut_mois__)%26(@consultation.date,'<=',__var_date_fin_mois__)
+  #     - fields: id,consultation.id,usager.id,usager.nom,usager.prenom,statut,modalite.id
+  # - action_structure:
+  #   module: Project/ProjectActionStructure
+  #   method: get
+  #   parameters:
+  #     - conditions: (@structure.code_dossier,'=',__var_structure__)%26(@date,'>=',__var_date_debut_mois__)%26(@date,'<=',__var_date_fin_mois__)
+  #     - fields: id,name,structure.id,structure.code_dossier,debut,fin
+  # - agenda_de_service:
+  #   module: Org/OrgEvent
+  #   method: get
+  #   parameters:
+  #     - conditions: (@structure.code_dossier,'=',__var_structure__)%26(@date,'>=',__var_date_debut_mois__)%26(@date,'<=',__var_date_fin_mois__)
+  #     - fields: id,name,structure.id,structure.code_dossier,debut,fin
+
+loop_url: 
+  - structures:
+    nom_variable: structure
+    valeurs:
+      - 101021
+      - 116001
+      - 117001
+      - 127001
+      - 127002
+      - 127003
+      - 138004
+      - 138005
+      - 138006
+      - 138011
+      - 138013
+      - 138020
+      - 138021
+      - 138023
+      - 138034
+      - 138056
+      - 142001
+      - 142002
+      - 142004
+      - 142008
+      - 142032
+      - 142046
+      - 142060
+      - 144001
+      - 163001
+      - 169005
+      - 169009
+      - 169010
+      - 169014
+      - 169017
+      - 169019
+      - 169020
+      - 169023
+      - 169025
+      - 169027
+      - 169029
+      - 169037
+      - 169052
+      - 169053
+      - 169055
+      - 169056
+      - 169057
+      - 169058
+      - 169072
+      - 169073
+      - 173015
+      - 173062
+      - 173063
+      - 174011
+      - 174012
+      - 174020
+      - 174023
+      - 174039
+      - 174054
+      - 174061
+      - 174070
+      - 175001
+      - 175003
+      - 175004
+      - 177004
+      - 185001
+      - 185002
+      - 186001
+      - 191001
+      - 1270031
+      - 1760010
+      - 1760011
+      - 1760012
+
+
+git_branch:
+  DEV: main
+  QUAL: main
+  PREPROD: main

@@ -1,0 +1,38 @@
+source_name: "cegid"
+type_source: "mssql"
+server: CEGID-PRO-SQL.sico.lan
+username: oveqlik
+database: XRPUPRD
+
+list_method:
+  - compte: 
+    sql: D_COMPTE.sql
+    filtres:
+      structure: 
+        - 169096
+  - ecriture: 
+    sql: F_ECRITURE.sql
+    filtres:
+      annee: 
+        - 2021
+        - 2022
+        - 2023
+        - 2024
+        - 2025
+      etaocecr:
+        - V
+      compte:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+  - budget: 
+    sql: F_BUDGET.sql
+    filtres:
+      annee: 
+        - 2023
+        - 2024
+        - 2025
