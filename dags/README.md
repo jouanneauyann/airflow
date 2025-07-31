@@ -2,7 +2,7 @@
 
 ## Actualise_liste_sharepoint
 
-Ce DAG Airflow permet d’actualiser automatiquement des listes SharePoint à partir d’un fichier Excel source. Il est conçu pour être utilisé dans le contexte de la gestion RH, mais peut être adapté à d’autres besoins.
+Ce DAG Airflow permet d’actualiser automatiquement des listes SharePoint à partir d’un fichier Excel source. Aujourd'hui il actualise les listes du SharePoint GRH mais peut être utilisé pour d'autres listes SharePoint.
 
 ### Fonctionnement
 1. Lecture du fichier Excel
