@@ -17,6 +17,8 @@ def execute_actualisation_liste_sharepoint():
     password = Variable.get("sharepoint_password")
     current_dir = os.path.dirname(os.path.abspath(__file__))
     excel_path = os.path.join(current_dir,'..','data','excel', 'SourcesListesSharePoint.xlsx')
+    
+    # Mettre en commentaire les listes à ne pas recharger pour un rechargement ponctuel
     mapping = {
         "ESAT":"ESAT",
         "INTERIM":"SalariesFacilit",
