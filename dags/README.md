@@ -5,12 +5,14 @@
 Ce DAG Airflow permet d’actualiser automatiquement des listes SharePoint à partir d’un fichier Excel source. Aujourd'hui il actualise les listes du SharePoint GRH mais peut être utilisé pour d'autres listes SharePoint.
 
 ### Fonctionnement
-1. Lecture du fichier Excel
-    Le DAG lit le fichier SourcesListesSharePoint.xlsx situé dans le dossier excel.
-    Chaque feuille du fichier correspond à une liste SharePoint à mettre à jour.
+1. Lecture du fichier Excel \
 
-2. Mapping des feuilles Excel vers les listes SharePoint
-    Le mapping est défini dans le script :
+Le DAG lit le fichier SourcesListesSharePoint.xlsx situé dans le dossier excel.
+Chaque feuille du fichier correspond à une liste SharePoint à mettre à jour.
+
+2. Mapping des feuilles Excel vers les listes SharePoint \
+
+Le mapping est défini dans le script :
 
 ```
 mapping = {
